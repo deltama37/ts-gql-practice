@@ -22,6 +22,7 @@ interface Photo {
   id: string
   name: string
   description?: string
+  url: string
 }
 
 interface PostPhoto {
@@ -60,3 +61,15 @@ const server = new ApolloServer({
 server
   .listen()
   .then(({ url }) => console.log(`GraphQL Service running on ${url}`))
+
+// query totalPhotos {
+//   totalPhotos
+// }
+// mutation newPhoto($name: String!, $description: String) {
+//   postPhoto(name: $name, description: $description) {
+//     id
+//     name
+//     description
+//     url
+//   }
+// }
