@@ -1,10 +1,25 @@
 import { ApolloServer } from 'apollo-server'
 
 const typeDefs = `
+  enum PhotoCategory {
+    SELFIE
+    PORTRAIT
+    ACTION
+    LANDSCAPE
+    GRAPHIC
+  }
+
   type Photo {
     id: ID!
     url: String!
     name: String!
+    description: String
+    category: PhotoCategory!
+  }
+
+  input PostPhotoInput {
+    name: String!
+    category: PhotoCategory=PORTRAIT
     description: String
   }
 
@@ -14,7 +29,7 @@ const typeDefs = `
   }
 
   type Mutation {
-    postPhoto(name: String! description: String): Photo!
+    postPhoto(input: PostPhotoInput!): Photo!
   }
 `
 
@@ -22,12 +37,14 @@ interface Photo {
   id: string
   name: string
   description?: string
-  url: string
+  url?: string
 }
 
-interface PostPhoto {
-  name: string
-  description?: string
+interface PostPhotoInput {
+  input: {
+    name: string
+    description?: string
+  }
 }
 
 let _id = 0
@@ -39,10 +56,11 @@ const resolvers = {
     allPhotos: (): Array<Photo> => photos,
   },
   Mutation: {
-    postPhoto(parent: string, args: PostPhoto): Photo {
+    postPhoto(parent: string, args: PostPhotoInput): Photo {
+      console.log(args)
       const newPhoto = {
         id: String(_id++),
-        ...args,
+        ...args.input,
       }
       photos.push(newPhoto)
       return newPhoto
@@ -61,15 +79,3 @@ const server = new ApolloServer({
 server
   .listen()
   .then(({ url }) => console.log(`GraphQL Service running on ${url}`))
-
-// query totalPhotos {
-//   totalPhotos
-// }
-// mutation newPhoto($name: String!, $description: String) {
-//   postPhoto(name: $name, description: $description) {
-//     id
-//     name
-//     description
-//     url
-//   }
-// }
