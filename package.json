@@ -19,7 +19,7 @@
     "lint": "eslint '*/**/*.{js,ts}' --quiet --fix"
   },
   "dependencies": {
-    "apollo-server": "^2.9.9",
+    "apollo-server": "^2.14.2",
     "graphql": "^14.5.8",
     "nodemon": "^1.19.4"
   }
